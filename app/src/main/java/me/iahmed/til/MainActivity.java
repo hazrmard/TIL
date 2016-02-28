@@ -19,6 +19,9 @@ import me.iahmed.til.ReadRedditTitle;
 
 public class MainActivity extends AppCompatActivity {
 
+    protected TextView main_text;
+    protected FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -29,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TextView main_text = (TextView) findViewById(R.id.main_text);
+        main_text = (TextView) findViewById(R.id.main_text);
         main_text.setText(R.string.greeting);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.fab_circle));
         fab.setHapticFeedbackEnabled(true);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -43,11 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 //  .setAction("Action", null).show();
             }
         });
-        try {
-            main_text.setText(new BackgroundTasks.GetToken().execute(this).get());
-        } catch (InterruptedException | ExecutionException e) {
-            //Like I care
-        }
+        new BackgroundTasks.GetToken().execute(this);
     }
 
     @Override

@@ -13,6 +13,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Collections.*;
+import java.util.List;
 
 
 import javax.net.ssl.HttpsURLConnection;
@@ -26,6 +30,7 @@ public class ReadRedditTitle {
     private static String url = "https://www.reddit.com/api/v1/access_token";
     private static String UserAgent = "android:me.iahmed.til:0.5 (by /u/hazrmard)";
     public static String token = null;
+    public static List<Entry> entries = Collections.synchronizedList(new ArrayList<Entry>());
 
     static Integer get_token(Context c) {
         System.out.println("Getting token...");

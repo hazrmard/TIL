@@ -8,11 +8,23 @@ import android.os.AsyncTask;
  */
 public class BackgroundTasks {
 
-    public static class GetToken extends AsyncTask<Context,Void,String> {
+    public static class GetToken extends AsyncTask<MainActivity,Void,String> {
 
-        protected String doInBackground(Context... c) {
+        protected String doInBackground(MainActivity... c) {
 
-            return ReadRedditTitle.get_token(c[0]).toString();
+            ReadRedditTitle.get_token(c[0]);
+
+            final MainActivity context = c[0];
+
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    context.main_text.setText("TOKEN: " + ReadRedditTitle.token);
+                }
+            });
+            return ReadRedditTitle.token;
         }
+
+
     }
 }
