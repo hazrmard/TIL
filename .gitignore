@@ -5,3 +5,5 @@
 .DS_Store
 /build
 /captures
+client_id.txt
+app/src/main/java/me/iahmed/til/config.java

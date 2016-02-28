@@ -12,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.concurrent.ExecutionException;
+
 import me.iahmed.til.ReadRedditTitle;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
                 //  .setAction("Action", null).show();
             }
         });
+        try {
+            main_text.setText(new BackgroundTasks.GetToken().execute(this).get());
+        } catch (InterruptedException | ExecutionException e) {
+            //Like I care
+        }
     }
 
     @Override
