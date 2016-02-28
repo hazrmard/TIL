@@ -32,31 +32,29 @@ public class ReadRedditTitle {
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
 
-            byte[] encoding = Base64.encode((ReadRedditTitle.client_id + ":").getBytes(), Base64.DEFAULT);
-            String S_encoding = encoding.toString();
-            conn.setRequestProperty("Authorization", "Basic " + S_encoding);
-
+            String encoding = Base64.encodeToString((ReadRedditTitle.client_id + ":").getBytes(), Base64.NO_PADDING);
+            conn.setRequestProperty("Authorization", "Basic " + encoding);
             conn.setRequestProperty("User-Agent", UserAgent);
 
-            JSONObject params = new JSONObject();
-            params.put("grant_type", "https://oauth.reddit.com/grants/installed_client");
-            params.put("device_id", helpers.getUUID(c));
-            String enc_params = URLEncoder.encode(params.toString(), "UTF-8");
+            String params = "grant_type=" + URLEncoder.encode("https://oauth.reddit.com/grants/installed_client", "UTF-8");
+            params += "&device_id=" + URLEncoder.encode(helpers.getUUID(c), "UTF-8");
 
             OutputStream os = conn.getOutputStream();
-            os.write(enc_params.getBytes());
+            os.write(params.getBytes());
             os.flush();
             os.close();
 
             int response_code = conn.getResponseCode();
+
+
+            InputStream in = (InputStream) conn.getInputStream();
+            System.out.println(in.read());
+
+            in.close();
+
             return response_code;
 
-            //InputStream in = (InputStream) conn.getInputStream();
-            //System.out.println(in.read());
-
-            //in.close();
-
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             //Like I care
             return -1;
         }
