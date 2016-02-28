@@ -6,8 +6,10 @@ import android.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -23,6 +25,7 @@ public class ReadRedditTitle {
     private static String client_id = config.client_id;
     private static String url = "https://www.reddit.com/api/v1/access_token";
     private static String UserAgent = "android:me.iahmed.til:0.5 (by /u/hazrmard)";
+    public static String token = null;
 
     static Integer get_token(Context c) {
         System.out.println("Getting token...");
@@ -48,13 +51,20 @@ public class ReadRedditTitle {
 
 
             InputStream in = (InputStream) conn.getInputStream();
-            System.out.println(in.read());
+            BufferedReader streamReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            StringBuilder responseStrBuilder = new StringBuilder();
 
+            String inputStr;
+            while ((inputStr = streamReader.readLine()) != null)
+                responseStrBuilder.append(inputStr);
+            JSONObject json_response = new JSONObject(responseStrBuilder.toString());
+            token = json_response.getString("access_token");
+            System.out.println("TOKEN: " + token);
             in.close();
 
             return response_code;
 
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             //Like I care
             return -1;
         }
