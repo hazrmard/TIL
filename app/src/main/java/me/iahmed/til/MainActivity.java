@@ -13,14 +13,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.concurrent.ExecutionException;
-
-import me.iahmed.til.ReadRedditTitle;
-
 public class MainActivity extends AppCompatActivity {
 
     protected TextView main_text;
     protected FloatingActionButton fab;
+    protected MainActivity main_context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +33,18 @@ public class MainActivity extends AppCompatActivity {
         main_text.setText(R.string.greeting);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.fab_circle));
+        fab.setImageDrawable(ContextCompat.getDrawable(main_context, R.drawable.fab_circle));
         fab.setHapticFeedbackEnabled(true);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                new BackgroundTasks.RefillQueue().execute(main_context);
                 //Snackbar.make(view, "MA BRO!", Snackbar.LENGTH_LONG)
                 //  .setAction("Action", null).show();
             }
         });
-        new BackgroundTasks.GetToken().execute(this);
+        new BackgroundTasks.GetToken().execute(main_context);
     }
 
     @Override

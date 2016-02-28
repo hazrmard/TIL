@@ -14,17 +14,15 @@ public class BackgroundTasks {
 
             ReadRedditTitle.get_token(c[0]);
 
-            final MainActivity context = c[0];
-
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    context.main_text.setText("TOKEN: " + ReadRedditTitle.token);
-                }
-            });
             return ReadRedditTitle.token;
         }
+    }
 
+    public static class RefillQueue extends AsyncTask<MainActivity, Void, Integer> {
 
+        protected Integer doInBackground(MainActivity... c) {
+
+            return ReadRedditTitle.refill_queue();
+        }
     }
 }
