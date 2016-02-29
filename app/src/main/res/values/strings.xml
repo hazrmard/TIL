@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TIL</string>
     <string name="greeting">Hello! Tap the button to begin learning. Tap me to read more.</string>
-    <string name="action_settings">Settings</string>
+    <string name="about_menu">About</string>
     <string name="greater_compat">API is or larger than 16.</string>
     <string name="lesser_compat">API is less than 16.</string>
     <string name="night_mode">Night Mode</string>
