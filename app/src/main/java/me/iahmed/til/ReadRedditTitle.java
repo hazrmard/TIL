@@ -24,7 +24,7 @@ public class ReadRedditTitle {
 
     private static String client_id = config.client_id;
     private static String access_url = "https://www.reddit.com/api/v1/access_token";
-    private static String request_url = "https://oauth.reddit.com/r/TIL/hot";
+    private static String request_url = "https://oauth.reddit.com/r/TodayILearned/hot";
     private static String UserAgent = "android:me.iahmed.til:0.5 (by /u/hazrmard)";
     private static String anchor = "";
     public static String token = null;
@@ -48,7 +48,7 @@ public class ReadRedditTitle {
     static Integer get_token(Context c) {
         System.out.println("Getting token...");
         try {
-            URL url = new URL(ReadRedditTitle.access_url);
+            URL url = new URL(ReadRedditTitle.access_url + "?after=" + anchor);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
@@ -84,20 +84,25 @@ public class ReadRedditTitle {
         //return true;
     }
 
-    static int refill_queue(){
+    static int refill_queue(MainActivity c){
 
         System.out.println("Getting titles.....");
         try {
 
-            URL url = new URL(request_url);
+            URL url = new URL(request_url + "?after=" + anchor);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
 
             conn.setRequestProperty("Authorization", "bearer " + token);
 
-            if (conn.getResponseCode() != HttpsURLConnection.HTTP_OK) {
-                System.out.println("Bad response");
+            if (conn.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+                System.out.println("Good response");
+            }   else if (conn.getResponseCode()==HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                get_token(c);
+                refill_queue(c);
+            }   else {
+                System.out.println("Bad response.");
                 return -1;
             }
 
@@ -108,10 +113,11 @@ public class ReadRedditTitle {
             //JSON format: data.children[].data{}
             JSONObject j_obj = json_response.getJSONObject("data");
             anchor = j_obj.getString("after");
+            System.out.println("After parameter: " + anchor);
             JSONArray j_array = j_obj.getJSONArray("children");
             for (int i=0; i<j_array.length(); i++) {
                 JSONObject j = j_array.getJSONObject(i).getJSONObject("data");
-                if (j.isNull("distinguished")) {        // check if a Mod-post or not
+                if (j.isNull("distinguished") || !j.getBoolean("stickied")) {        // check if a Mod-post or not
                     Entry e = new Entry(j.getString("title"), j.getString("author"), j.getString("url"));
                     entries.add(e);
                 }

@@ -1,5 +1,7 @@
 package me.iahmed.til;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,11 +20,14 @@ public class MainActivity extends AppCompatActivity {
     protected TextView main_text;
     protected FloatingActionButton fab;
     protected MainActivity main_context = this;
+    private Entry current_entry=null;
 
     @Override
     protected void onStart() {
         super.onStart();
-        new BackgroundTasks.GetToken().execute(main_context);
+        if (ReadRedditTitle.entries.isEmpty()) {
+            new BackgroundTasks.GetToken().execute(main_context);
+        }
     }
 
     @Override
@@ -37,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
         main_text = (TextView) findViewById(R.id.main_text);
         main_text.setText(R.string.greeting);
+        main_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (current_entry!=null) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(current_entry.link));
+                    startActivity(browserIntent);
+                }
+            }
+        });
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageDrawable(ContextCompat.getDrawable(main_context, R.drawable.fab_circle));
@@ -48,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     Entry e = ReadRedditTitle.entries.remove(0);
+                    current_entry = e;
                     main_text.setText(e.getTitle());
                     System.out.println("Titles left: " + ReadRedditTitle.entries.size());
                 } catch (IndexOutOfBoundsException e) {
