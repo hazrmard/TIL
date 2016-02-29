@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="main_text">24sp</dimen>
     <dimen name="main_text_top_padding">32dp</dimen>
+    <dimen name="main_text_minor_padding">8dp</dimen>
 </resources>

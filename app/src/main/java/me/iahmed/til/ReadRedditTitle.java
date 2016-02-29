@@ -45,7 +45,7 @@ public class ReadRedditTitle {
         }
     }
 
-    static Integer get_token(Context c) {
+    static Integer get_token(MainActivity c) {
         System.out.println("Getting token...");
         try {
             URL url = new URL(ReadRedditTitle.access_url + "?after=" + anchor);
@@ -117,7 +117,8 @@ public class ReadRedditTitle {
             JSONArray j_array = j_obj.getJSONArray("children");
             for (int i=0; i<j_array.length(); i++) {
                 JSONObject j = j_array.getJSONObject(i).getJSONObject("data");
-                if (j.isNull("distinguished") || !j.getBoolean("stickied")) {        // check if a Mod-post or not
+                if (j.isNull("distinguished") && !j.getBoolean("stickied")
+                                && !j.getBoolean("is_self") && j.getInt("score")>0) {        // check if a Mod-post or not
                     Entry e = new Entry(j.getString("title"), j.getString("author"), j.getString("url"));
                     entries.add(e);
                 }

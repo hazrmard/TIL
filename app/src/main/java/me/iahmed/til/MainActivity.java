@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        helpers.setNightMode(main_context, helpers.getNightMode(main_context));
+        MenuItem nightmode_option = menu.findItem(R.id.night_mode);
+        nightmode_option.setChecked(helpers.getNightMode(main_context));
         return true;
     }
 
@@ -101,8 +104,10 @@ public class MainActivity extends AppCompatActivity {
             item.setChecked(!item.isChecked());
             if (item.isChecked()) {
                 Toast.makeText(this, R.string.night_mode_en, Toast.LENGTH_SHORT).show();
+                helpers.setNightMode(main_context, true);
             } else {
                 Toast.makeText(this, R.string.night_mode_den, Toast.LENGTH_SHORT).show();
+                helpers.setNightMode(main_context, false);
             }
             return true;
         }

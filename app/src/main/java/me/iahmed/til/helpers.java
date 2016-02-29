@@ -2,6 +2,11 @@ package me.iahmed.til;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.text.Layout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import java.util.UUID;
 
 /**
@@ -12,13 +17,13 @@ public class helpers {
     static private SharedPreferences.Editor ed;
     static private SharedPreferences settings=null;
 
-    private static void openSettings(Context c) {
+    private static void openSettings(MainActivity c) {
         if (settings==null) {
             settings = c.getSharedPreferences(pref_fname, 0);
         }
     }
 
-    protected static String getUUID(Context c) {
+    protected static String getUUID(MainActivity c) {
         openSettings(c);
         String uuid = settings.getString("UUID", "");
         if (uuid.equals("")) {
@@ -34,16 +39,26 @@ public class helpers {
         closePrefEditor();
     }
 
-    public boolean getNightMode(Context c) {
+    public static boolean getNightMode(MainActivity c) {
         openSettings(c);
         return settings.getBoolean("NightMode", false);
     }
 
-    public static void setNightMode(Context c) {
+    public static void setNightMode(MainActivity c, boolean mode) {
         openSettings(c);
         startPrefEditor();
-        ed.putBoolean("NightMode", false);
+        ed.putBoolean("NightMode", mode);
         closePrefEditor();
+
+        RelativeLayout l = (RelativeLayout) c.findViewById(R.id.relative_layout);
+        TextView t = c.main_text;
+        if (mode) {
+            l.setBackgroundColor(Color.DKGRAY);
+            t.setTextColor(Color.WHITE);
+        } else {
+            l.setBackgroundColor(Color.WHITE);
+            t.setTextColor(Color.DKGRAY);
+        }
     }
 
     private static void startPrefEditor() {
