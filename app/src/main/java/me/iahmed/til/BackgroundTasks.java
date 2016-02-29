@@ -2,19 +2,30 @@ package me.iahmed.til;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 
 /**
  * Created by Ibrahim on 2/27/2016.
  */
 public class BackgroundTasks {
 
-    public static class GetToken extends AsyncTask<MainActivity,Void,String> {
+    public static class GetToken extends AsyncTask<MainActivity,Void,Integer> {
 
-        protected String doInBackground(MainActivity... c) {
+        protected Integer doInBackground(MainActivity... c) {
 
             ReadRedditTitle.get_token(c[0]);
+            ReadRedditTitle.refill_queue();
 
-            return ReadRedditTitle.token;
+            final MainActivity context = c[0];
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Snackbar.make(context.fab, R.string.loaded, Snackbar.LENGTH_SHORT);
+                }
+            });
+
+            //return ReadRedditTitle.token;
+            return 0;
         }
     }
 

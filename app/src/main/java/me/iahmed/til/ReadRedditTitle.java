@@ -26,6 +26,7 @@ public class ReadRedditTitle {
     private static String access_url = "https://www.reddit.com/api/v1/access_token";
     private static String request_url = "https://oauth.reddit.com/r/TIL/hot";
     private static String UserAgent = "android:me.iahmed.til:0.5 (by /u/hazrmard)";
+    private static String anchor = "";
     public static String token = null;
     public static List<Entry> entries = Collections.synchronizedList(new ArrayList<Entry>());
 
@@ -96,6 +97,7 @@ public class ReadRedditTitle {
             conn.setRequestProperty("Authorization", "bearer " + token);
 
             if (conn.getResponseCode() != HttpsURLConnection.HTTP_OK) {
+                System.out.println("Bad response");
                 return -1;
             }
 
@@ -105,6 +107,7 @@ public class ReadRedditTitle {
 
             //JSON format: data.children[].data{}
             JSONObject j_obj = json_response.getJSONObject("data");
+            anchor = j_obj.getString("after");
             JSONArray j_array = j_obj.getJSONArray("children");
             for (int i=0; i<j_array.length(); i++) {
                 JSONObject j = j_array.getJSONObject(i).getJSONObject("data");
@@ -113,6 +116,7 @@ public class ReadRedditTitle {
                     entries.add(e);
                 }
             }
+            System.out.println("Got " + entries.size() + " titles.");
 
         } catch (IOException | JSONException e) {
             System.out.println(e.getMessage());

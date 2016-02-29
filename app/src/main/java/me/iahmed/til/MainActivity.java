@@ -20,6 +20,12 @@ public class MainActivity extends AppCompatActivity {
     protected MainActivity main_context = this;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        new BackgroundTasks.GetToken().execute(main_context);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         int SDK = android.os.Build.VERSION.SDK_INT;
@@ -39,12 +45,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                new BackgroundTasks.RefillQueue().execute(main_context);
-                //Snackbar.make(view, "MA BRO!", Snackbar.LENGTH_LONG)
-                //  .setAction("Action", null).show();
+
+                try {
+                    Entry e = ReadRedditTitle.entries.remove(0);
+                    main_text.setText(e.getTitle());
+                    System.out.println("Titles left: " + ReadRedditTitle.entries.size());
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("List is empty.");
+                }
+
+                if (ReadRedditTitle.entries.isEmpty()) {
+                    Snackbar.make(view, R.string.loading, Snackbar.LENGTH_SHORT)
+                      .setAction("Action", null).show();
+                    new BackgroundTasks.RefillQueue().execute(main_context);
+                }
+
             }
         });
-        new BackgroundTasks.GetToken().execute(main_context);
+
     }
 
     @Override

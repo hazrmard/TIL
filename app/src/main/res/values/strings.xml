@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">TIL</string>
-    <string name="greeting">HELLO PEEPS!</string>
+    <string name="greeting">Hello! Tap the button to begin learning.</string>
     <string name="action_settings">Settings</string>
     <string name="greater_compat">API is or larger than 16.</string>
     <string name="lesser_compat">API is less than 16.</string>
     <string name="night_mode">Night Mode</string>
     <string name="night_mode_en">Night mode enabled!</string>
     <string name="night_mode_den">Night mode disabled!</string>
+    <string name="loading">Loading more facts &#8230;</string>
+    <string name="loaded">Loading complete!</string>
 </resources>
