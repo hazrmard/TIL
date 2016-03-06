@@ -1,9 +1,10 @@
 package me.iahmed.til;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.RequiresPermission;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         main_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (current_entry!=null) {
+                if (current_entry != null) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(current_entry.link));
                     startActivity(browserIntent);
                 }
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
 
                 try {
                     Entry e = ReadRedditTitle.entries.remove(0);
@@ -72,10 +73,26 @@ public class MainActivity extends AppCompatActivity {
 
                 if (ReadRedditTitle.entries.isEmpty()) {
                     Snackbar.make(view, R.string.loading, Snackbar.LENGTH_SHORT)
-                      .setAction("Action", null).show();
+                            .setAction("Action", null).show();
                     new BackgroundTasks.RefillQueue().execute(main_context);
                 }
 
+            }
+        });
+        fab.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (current_entry!=null) {
+                    v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    Intent share = new Intent();
+                    share.setAction(Intent.ACTION_SEND);
+                    share.putExtra(Intent.EXTRA_TEXT, current_entry.getTitle());
+                    share.setType("text/plain");
+                    startActivity(Intent.createChooser(share, getResources().getText(R.string.share_prompt)));
+                    return true;
+                } else {
+                    return false;
+                }
             }
         });
 

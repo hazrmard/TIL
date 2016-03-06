@@ -26,7 +26,7 @@ public class ReadRedditTitle {
     private static String access_url = "https://www.reddit.com/api/v1/access_token";
     protected static String request_url = "https://oauth.reddit.com/r/TodayILearned/";
     protected static String request_suburl = "hot";
-    private static String UserAgent = "android:me.iahmed.til:0.5 (by /u/hazrmard)";
+    private static String UserAgent = "android:me.iahmed.til:0.6 (by /u/hazrmard)";
     private static String anchor = "";
     public static String token = null;
     public static List<Entry> entries = Collections.synchronizedList(new ArrayList<Entry>());
