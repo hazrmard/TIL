@@ -10,4 +10,7 @@
     <string name="loading">Loading more facts &#8230;</string>
     <string name="loaded">Loading complete!</string>
     <string name="loading_error">Error while loading data. Oops.</string>
+    <string name="menu_by_hot">Hot</string>
+    <string name="menu_by_top">Top</string>
+    <string name="menu_by_new">New</string>
 </resources>

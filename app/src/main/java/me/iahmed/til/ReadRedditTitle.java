@@ -24,7 +24,8 @@ public class ReadRedditTitle {
 
     private static String client_id = config.client_id;
     private static String access_url = "https://www.reddit.com/api/v1/access_token";
-    private static String request_url = "https://oauth.reddit.com/r/TodayILearned/hot";
+    protected static String request_url = "https://oauth.reddit.com/r/TodayILearned/";
+    protected static String request_suburl = "hot";
     private static String UserAgent = "android:me.iahmed.til:0.5 (by /u/hazrmard)";
     private static String anchor = "";
     public static String token = null;
@@ -43,6 +44,16 @@ public class ReadRedditTitle {
             System.out.println(e.getMessage());
             return new Object();
         }
+    }
+
+    private static String constructURL() {
+        String queries = "";
+        if (request_suburl.equals("top")) {
+            queries = "&t=day";
+        }
+        String url = request_url + request_suburl + "?after=" + anchor + queries;
+        System.out.println("Contructed URL:" + url);
+        return url;
     }
 
     static Integer get_token(MainActivity c) {
@@ -89,7 +100,7 @@ public class ReadRedditTitle {
         System.out.println("Getting titles.....");
         try {
 
-            URL url = new URL(request_url + "?after=" + anchor);
+            URL url = new URL(constructURL());
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
@@ -129,6 +140,13 @@ public class ReadRedditTitle {
             System.out.println(e.getMessage());
             return -1;
         }
+        return 0;
+    }
+
+    static int flush_queue() {
+        entries.clear();
+        anchor="";
+        System.out.println("Flushed entries queue. Cleared anchor.");
         return 0;
     }
 }

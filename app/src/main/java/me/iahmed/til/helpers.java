@@ -44,6 +44,29 @@ public class helpers {
         return settings.getBoolean("NightMode", false);
     }
 
+    public static String getSearchMode(MainActivity c) {
+        openSettings(c);
+        return settings.getString("SearchMode", "hot");
+    }
+
+    public static void setSearchMode(MainActivity c, boolean _hot, boolean _top, boolean _new){
+        openSettings(c);
+        startPrefEditor();
+        String mode="hot";
+        if (_hot) {
+            mode = "hot";
+        } else if (_top) {
+            mode = "top";
+        } else if (_new) {
+            mode = "new";
+        }
+        ReadRedditTitle.request_suburl = mode;
+        ed.putString("SearchMode", mode);
+        closePrefEditor();
+        System.out.println("SearchMode options:" + _hot + " " + _top + " " + _new);
+        System.out.println("setSearchMode called: " + mode);
+    }
+
     public static void setNightMode(MainActivity c, boolean mode) {
         openSettings(c);
         startPrefEditor();

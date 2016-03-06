@@ -5,4 +5,13 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/night_mode" android:checkable="true"
         android:title="@string/night_mode" android:orderInCategory="200" />
+    <group android:checkableBehavior="single" android:orderInCategory="300"
+         android:id="@+id/search_mode">
+        <item android:id="@+id/by_hot" app:showAsAction="never"
+            android:title="@string/menu_by_hot"/>
+        <item android:id="@+id/by_top"  app:showAsAction="never"
+            android:title="@string/menu_by_top"/>
+        <item android:id="@+id/by_new"  app:showAsAction="never"
+            android:title="@string/menu_by_new"/>
+    </group>
 </menu>

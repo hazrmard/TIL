@@ -3,6 +3,7 @@ package me.iahmed.til;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.RequiresPermission;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -84,9 +85,36 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         helpers.setNightMode(main_context, helpers.getNightMode(main_context));
         MenuItem nightmode_option = menu.findItem(R.id.night_mode);
         nightmode_option.setChecked(helpers.getNightMode(main_context));
+
+        String search_mode = helpers.getSearchMode(main_context);
+        System.out.println("Stored search mode:" + search_mode);
+        MenuItem byhot = menu.findItem(R.id.by_hot);
+        MenuItem bytop = menu.findItem(R.id.by_top);
+        MenuItem bynew = menu.findItem(R.id.by_new);
+        switch (search_mode) {
+            case "hot":
+                byhot.setChecked(true);
+                break;
+            case "top":
+                bytop.setChecked(true);
+                break;
+            case "new":
+                bynew.setChecked(true);
+                break;
+        }
+
+        System.out.println(byhot.isChecked());
+        System.out.println(bytop.isChecked());
+        System.out.println(bynew.isChecked());
+
+        helpers.setSearchMode(main_context, byhot.isChecked(),
+                bytop.isChecked(),
+                bynew.isChecked());
+        System.out.println("SearchMode after menu inflation is: " + ReadRedditTitle.request_suburl);
         return true;
     }
 
@@ -112,6 +140,17 @@ public class MainActivity extends AppCompatActivity {
                 helpers.setNightMode(main_context, false);
             }
             return true;
+        } else if ((id==R.id.by_hot) || (id==R.id.by_new) || (id==R.id.by_top)) {
+
+            item.setChecked(true);
+            helpers.setSearchMode(main_context, id == R.id.by_hot,
+                    id == R.id.by_top,
+                    id == R.id.by_new);
+
+            ReadRedditTitle.flush_queue();
+            Snackbar.make(fab, R.string.loading, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+            new BackgroundTasks.RefillQueue().execute(main_context);
         }
 
 
