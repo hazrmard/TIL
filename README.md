@@ -1,5 +1,5 @@
 # TIL
-Today I Learned some new things. My first Android app. Uses Reddit API.  
+Today I Learned some new things. My first Android app. Uses Reddit API. Available on [Google Play](https://play.google.com/store/apps/details?id=me.iahmed.til).  
 <img src="app/src/main/res/mipmap-hdpi/ic_launcher.png" width=256/>
 
 ##What is TIL?
