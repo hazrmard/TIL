@@ -12,7 +12,7 @@ In addition, the app stores unique device IDs and user preferences for a consist
   
 ![alt tag](demo.gif)
   
-##TODO
+##TODO [v0.6 updates]
 * Add more subreddits to parse.
-* Include internal webview for smoother experience.
-* Incorporate sharing features.
+* Include internal webview for smoother experience. [DISCARDED]
+* Incorporate sharing features. [DONE]
